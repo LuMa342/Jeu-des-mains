@@ -21,6 +21,86 @@ def get_print(number_l: int, number_r: int, player_id: int):
     return lines
 
 
+def is_valid(move, l_player, r_player, l_opponent, r_opponent):
+    if move == 'll':
+        if l_player == 0:
+            print('You cannot attack with an empty hand.')
+            return False
+        elif l_opponent == 0:
+            print('You cannot attack an empty hand.')
+            return False
+        else:
+            return True
+    elif move == 'lr':
+        if l_player == 0:
+            print('You cannot attack with an empty hand.')
+            return False
+        elif r_opponent == 0:
+            print('You cannot attack an empty hand.')
+            return False
+        else:
+            return True
+    elif move == 'rl':
+        if r_player == 0:
+            print('You cannot attack with an empty hand.')
+            return False
+        elif l_opponent == 0:
+            print('You cannot attack an empty hand.')
+            return False
+        else:
+            return True
+    elif move == 'rr':
+        if r_player == 0:
+            print('You cannot attack with an empty hand.')
+            return False
+        elif r_opponent == 0:
+            print('You cannot attack an empty hand.')
+            return False
+        else:
+            return True
+    elif move == 'div':
+        if (l_player == 0) & (r_player % 2 == 0) or ((l_player % 2 == 0) & (r_player == 0)):
+            return True
+        else:
+            print('To use div, you must have one empty hand and an even number on the other. Try again.')
+            return False
+    else:
+        print(f'{move} is not a valid move.')
+        return False
+
+
+def move_p1(move, lp1, rp1, lp2, rp2):
+    if move == 'll':
+        lp2 = (lp2 + lp1) % 5
+    elif move == 'lr':
+        rp2 = (rp2 + lp1) % 5
+    elif move == 'rl':
+        lp2 = (lp2 + rp1) % 5
+    elif move == 'rr':
+        rp2 = (rp2 + rp1) % 5
+    else:
+        new_value = max(lp1, rp1) // 2
+        lp1, rp1 = new_value, new_value
+    return lp1, rp1, lp2, rp2
+
+
+def move_p2(move, lp1, rp1, lp2, rp2):
+    lp2, rp2, lp1, rp1 = move_p1(move, lp2, rp2, lp1, rp1)
+    return lp1, rp1, lp2, rp2
+
+
+def move_p(move, lp1, rp1, lp2, rp2, p):
+    if p == 0:
+        if is_valid(move, lp1, rp1, lp2, rp2):
+            lp1, rp1, lp2, rp2 = move_p1(move, lp1, rp1, lp2, rp2)
+            p = (p + 1) % 2
+    else:
+        if is_valid(move, lp2, rp2, lp1, rp1):
+            lp1, rp1, lp2, rp2 = move_p2(move, lp1, rp1, lp2, rp2)
+            p = (p + 1) % 2
+    return lp1, rp1, lp2, rp2, p
+
+
 if __name__ == '__main__':
     left_p1, right_p1, left_p2, right_p2 = 1, 1, 1, 1
     player = 0
@@ -37,91 +117,7 @@ if __name__ == '__main__':
             print(line)
         print(f'       l ({left_p1})                    r ({right_p1})')
         print('                 Player 1')
-        move_p = input(f'Hi player {player + 1}! What is your move? (ll/lr/rl/rr/div)')
-        if move_p == 'll':
-            if player == 0:
-                if left_p2 == 0:
-                    print('You cannot attack an empty hand.')
-                elif left_p1 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    left_p2 = (left_p2 + left_p1) % 5
-                    player = (player + 1) % 2
-            else:
-                if left_p1 == 0:
-                    print('You cannot attack an empty hand.')
-                elif left_p2 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    left_p1 = (left_p1 + left_p2) % 5
-                    player = (player + 1) % 2
-        elif move_p == 'lr':
-            if player == 0:
-                if right_p2 == 0:
-                    print('You cannot attack an empty hand.')
-                elif left_p1 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    right_p2 = (right_p2 + left_p1) % 5
-                    player = (player + 1) % 2
-            else:
-                if right_p1 == 0:
-                    print('You cannot attack an empty hand.')
-                elif left_p2 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    right_p1 = (right_p1 + left_p2) % 5
-                    player = (player + 1) % 2
-        elif move_p == 'rl':
-            if player == 0:
-                if left_p2 == 0:
-                    print('You cannot attack an empty hand.')
-                elif right_p1 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    left_p2 = (left_p2 + right_p1) % 5
-                    player = (player + 1) % 2
-            else:
-                if left_p1 == 0:
-                    print('You cannot attack an empty hand.')
-                elif right_p2 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    left_p1 = (left_p1 + right_p2) % 5
-                    player = (player + 1) % 2
-        elif move_p == 'rr':
-            if player == 0:
-                if right_p2 == 0:
-                    print('You cannot attack an empty hand.')
-                elif right_p1 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    right_p2 = (right_p2 + right_p1) % 5
-                    player = (player + 1) % 2
-            else:
-                if right_p1 == 0:
-                    print('You cannot attack an empty hand.')
-                elif right_p2 == 0:
-                    print('You cannot attack with an empty hand.')
-                else:
-                    right_p1 = (right_p1 + right_p2) % 5
-                    player = (player + 1) % 2
-        elif move_p == 'div':
-            if player == 0:
-                if (left_p1 == 0) & (right_p1 % 2 == 0) or ((left_p1 % 2 == 0) & (right_p1 == 0)):
-                    new_value = max(left_p1, right_p1) // 2
-                    left_p1, right_p1 = new_value, new_value
-                    player = (player + 1) % 2
-                else:
-                    print('To use div, you ,ust have one empty hand and an even number on the other. Try again.')
-            else:
-                if (left_p2 == 0) & (right_p2 % 2 == 0) or ((left_p2 % 2 == 0) & (right_p2 == 0)):
-                    new_value = max(left_p2, right_p2) // 2
-                    left_p2, right_p2 = new_value, new_value
-                    player = (player + 1) % 2
-                else:
-                    print('To use div, you must have one empty hand and an even number on the other. Try again.')
-        else:
-            print(f'{move_p} is not a valid move. Retry.')
+        m = input(f'Hi player {player + 1}! What is your move? (ll/lr/rl/rr/div)')
+        left_p1, right_p1, left_p2, right_p2, player = move_p(m, left_p1, right_p1, left_p2, right_p2, player)
     print(f'Player {(player+1) % 2 + 1} wins!')
 
