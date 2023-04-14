@@ -69,34 +69,29 @@ def is_valid(move, l_player, r_player, l_opponent, r_opponent):
         return False
 
 
-def move_p1(move, lp1, rp1, lp2, rp2):
+def move_player(move, l_player, r_player, l_opponent, r_opponent):
     if move == 'll':
-        lp2 = (lp2 + lp1) % 5
+        l_opponent = (l_opponent + l_player) % 5
     elif move == 'lr':
-        rp2 = (rp2 + lp1) % 5
+        r_opponent = (r_opponent + l_player) % 5
     elif move == 'rl':
-        lp2 = (lp2 + rp1) % 5
+        l_opponent = (l_opponent + r_player) % 5
     elif move == 'rr':
-        rp2 = (rp2 + rp1) % 5
+        r_opponent = (r_opponent + r_player) % 5
     else:
-        new_value = max(lp1, rp1) // 2
-        lp1, rp1 = new_value, new_value
-    return lp1, rp1, lp2, rp2
-
-
-def move_p2(move, lp1, rp1, lp2, rp2):
-    lp2, rp2, lp1, rp1 = move_p1(move, lp2, rp2, lp1, rp1)
-    return lp1, rp1, lp2, rp2
+        new_value = max(l_player, r_player) // 2
+        l_player, r_player = new_value, new_value
+    return l_player, r_player, l_opponent, r_opponent
 
 
 def move_p(move, lp1, rp1, lp2, rp2, p):
     if p == 0:
         if is_valid(move, lp1, rp1, lp2, rp2):
-            lp1, rp1, lp2, rp2 = move_p1(move, lp1, rp1, lp2, rp2)
+            lp1, rp1, lp2, rp2 = move_player(move, lp1, rp1, lp2, rp2)
             p = (p + 1) % 2
     else:
         if is_valid(move, lp2, rp2, lp1, rp1):
-            lp1, rp1, lp2, rp2 = move_p2(move, lp1, rp1, lp2, rp2)
+            lp2, rp2, lp1, rp1 = move_player(move, lp2, rp2, lp1, rp1)
             p = (p + 1) % 2
     return lp1, rp1, lp2, rp2, p
 
