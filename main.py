@@ -135,7 +135,7 @@ if __name__ == '__main__':
     if r == 'y':
         name_p1 = input("Player 1's name: ")
         name_p2 = input("Player 2's name: ")
-        while (name_p1 == '') or (name_p2 == '') or (name_p1 == name_p2):
+        while (name_p1 == '') or (name_p2 == '') or (name_p1 == name_p2) or (name_p1.isspace()) or (name_p2.isspace()):
             print('Invalid names. Names cannot be empty or identical. Try again.')
             name_p1 = input("Player 1's name: ")
             name_p2 = input("Player 2's name: ")
