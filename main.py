@@ -133,8 +133,8 @@ if __name__ == '__main__':
     name_p1, name_p2 = 'Player 1', 'Player 2'
     r = input('Do you wish to enter player names? (y/n)').lower()
     if r == 'y':
-        name_p1 = input("Player 1's name:")
-        name_p2 = input("Player 2's name:")
+        name_p1 = input("Player 1's name: ")
+        name_p2 = input("Player 2's name: ")
         while (name_p1 == '') or (name_p2 == '') or (name_p1 == name_p2):
             print('Invalid names. Names cannot be empty or identical. Try again.')
             name_p1 = input("Player 1's name: ")
@@ -156,7 +156,10 @@ if __name__ == '__main__':
             print(line)
         print(f'       l ({left_p1})                    r ({right_p1})')
         print(name_p1.center(44))
-        m = input(f'Hi player {player + 1}! What is your move? (ll/lr/rl/rr/div)').lower()
+        name = name_p1 if player == 0 else name_p2
+        m = input(f'Hi {name}! What is your move? (ll/lr/rl/rr/div)').lower()
         left_p1, right_p1, left_p2, right_p2, player = move_p(m, left_p1, right_p1, left_p2, right_p2, player)
-    print(f'Player {(player+1) % 2 + 1} wins!')
+
+    name_win = name_p2 if player == 0 else name_p1
+    print(f'{name_win} wins!')
 
